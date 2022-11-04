@@ -1,7 +1,8 @@
 #Options for user
 print('Use operators: +,-,x,/')
 #start of the programme
-for i in range(10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000):
+i = 1
+while i == 1:
     a = float(input("Enter a number: "))
     b = input("Enter an operator: ")
     c = float(input("Enter another number: "))
