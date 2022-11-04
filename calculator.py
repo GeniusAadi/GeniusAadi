@@ -1,8 +1,7 @@
 #Options for user
 print('Use operators: +,-,x,/')
 #start of the programme
-i = 1
-while i == 1:
+while True:
     a = float(input("Enter a number: "))
     b = input("Enter an operator: ")
     c = float(input("Enter another number: "))
