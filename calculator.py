@@ -1,6 +1,6 @@
 #Making a calculator
 #option for user
-print("Please enter any from given symbols: (+,-,x,/)")
+print("Please enter any from given operators: (+,-,x,/)")
 while True:
                 try:
                                 a = float(input("Please enter your first number = " ))
