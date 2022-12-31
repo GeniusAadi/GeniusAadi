@@ -1,1 +1,1 @@
-pip install streamlit_lottie
+streamlit_lottie
