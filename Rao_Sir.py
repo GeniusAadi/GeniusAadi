@@ -11,6 +11,9 @@ def anime_url(url):
 #load assets
 math_anime=anime_url("https://assets10.lottiefiles.com/packages/lf20_neoi7cp3.json")
 img=Image.open("images/web.jpg")
+img1=Image.open("images/web1.jpg")
+img2=Image.open("images/web2.jpg")
+img3=Image.open("images/web3.jpg")
 #Header Section
 with st.container():
     l_column,r_column = st.columns(2)
@@ -18,9 +21,14 @@ with st.container():
         st.title("WELCOME to Rao Maths Classes.")
         st.subheader("Hi, I am Rakes Rao.")
         st.subheader("This website is for study purpose only.")
-        st.image(img)
+        st.image(img1)
+        st.image(img2)
+        st.header("Study Material")
+        st.subheader("For study material [Click Here.](https://www.youtube.com/@rakeshkumarrao8782)")
     with r_column:
         st_lottie(math_anime,height=200,key="maths")
+        st.image(img)
+        st.image(img3)
         st.header("Follow me on:")
         st.subheader("[Youtube](https://www.youtube.com/@rakeshkumarrao8782)")
         st.subheader("[Instagram](https://www.instagram.com/rakeshkumarrao77/)")
