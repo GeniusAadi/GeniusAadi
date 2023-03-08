@@ -42,7 +42,7 @@ for file in files:
     elif selected_dir == subdirs[1]:
         video_file = open(file, 'rb')
         video_bytes = video_file.read()
-        if st.download_button("Download Video",video_bytes,file_name=file.name,mime="webm/mpg/mp2/mpeg/mpe/mpv/ogg/mp4/m4p/m4v/avi/wmv/mov/qt/flv/swf/avchd"):
+        if st.download_button("Download Video",video_bytes,file_name=file.name,mime="video/webm/mpg/mp2/mpeg/mpe/mpv/ogg/mp4/m4p/m4v/avi/wmv/mov/qt/flv/swf/avchd"):
             download_image(file)
             st.success("Video downloaded successfully")
         st.video(video_bytes)
