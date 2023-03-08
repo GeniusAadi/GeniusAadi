@@ -30,7 +30,7 @@ if root_dir is not None:
 st.write("Files in selected folder:")
 for file in files:
     st.write("- " + file.name)
-    if selected_dir == subdirs[0]:
+    if selected_dir == subdirs[1]:
         image_paths= Image.open(file)
         with BytesIO() as output:
             image_paths.save(output, format='PNG')
@@ -39,7 +39,7 @@ for file in files:
             download_image(file)
             st.success("Image downloaded successfully")
         st.image(image_paths, width=250, caption=image_paths)
-    elif selected_dir == subdirs[1]:
+    elif selected_dir == subdirs[0]:
         video_file = open(file, 'rb')
         video_bytes = video_file.read()
         if st.download_button("Download Video",video_bytes,file_name=file.name,mime="video/webm/mpg/mp2/mpeg/mpe/mpv/ogg/mp4/m4p/m4v/avi/wmv/mov/qt/flv/swf/avchd"):
