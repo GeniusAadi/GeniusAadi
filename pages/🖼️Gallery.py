@@ -4,6 +4,14 @@ from io import BytesIO
 from pathlib import Path
 
 st.set_page_config(page_title="Gallery", page_icon=":smile:", layout="wide")
+hide_st_style = '''
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    </style>
+    '''
+st.markdown(hide_st_style, unsafe_allow_html=True)
 #function for downloading both videos and photos
 def download_image(url):
     with open(url, "r+", encoding="latin1") as f:
