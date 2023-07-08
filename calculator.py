@@ -18,5 +18,5 @@ while True:
                                 else:
                                                 print("Error : Please enter a valid operator!")  
                  #for showing error if a and c are not numbers                                            
-                except ValueError:
+                except Exception as e:
                                 print("Error : Please enter a number!")                
