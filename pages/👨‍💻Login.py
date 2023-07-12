@@ -46,34 +46,40 @@ st.title("Login as Admin")
 name = st.text_input("Admin name")
 password = st.text_input("Password", type='password')
 
+logged_in = False
+
 if (name == "Rakes Rao") and (password == "R@kE$#M@th$&Mu$ic"):
-    lg = st.button("Login")
-    if lg:
-        st.title("Welcome to Gallery.")
-        st.header("WELCOME Rao Sir.")
-        gal = st.button("Gallery")
-        if gal:
-            pho = st.checkbox("Photos")
-            vdo = st.checkbox("Videos")
-            upload = file(pho, vdo)
-            store(upload, pho, vdo)
+    logged_in = True
+
+if logged_in:
+    st.title("Welcome to Gallery.")
+    st.header("WELCOME Rao Sir.")
+    gal = st.button("Gallery")
+    
+    if gal:
+        pho = st.checkbox("Photos")
+        vdo = st.checkbox("Videos")
+        upload = file(pho, vdo)
+        store(upload, pho, vdo)
+        
+        rm = st.button("Delete")
+        
+        if rm:
+            photos_files = os.listdir("my_directory/photos")
+            videos_files = os.listdir("my_directory/videos")
             
-            rm = st.button("Delete")
-            if rm:
-                photos_files = os.listdir("my_directory/photos")
-                videos_files = os.listdir("my_directory/videos")
-                
-                # Display checkboxes for all files in the "photos" directory
-                photos_files_selected = st.multiselect("Select photos to delete:", options=photos_files)
+            # Display checkboxes for all files in the "photos" directory
+            photos_files_selected = st.multiselect("Select photos to delete:", options=photos_files)
 
-                # Display checkboxes for all files in the "videos" directory
-                videos_files_selected = st.multiselect("Select videos to delete:", options=videos_files)
+            # Display checkboxes for all files in the "videos" directory
+            videos_files_selected = st.multiselect("Select videos to delete:", options=videos_files)
 
-                if st.button("Delete Selected Files"):
-                    selected_files = photos_files_selected + videos_files_selected
-                    if len(selected_files) == 0:
-                        st.warning("No files selected.")
-                    else:
-                        delete_selected_files(selected_files)
-else:
+            if st.button("Delete Selected Files"):
+                selected_files = photos_files_selected + videos_files_selected
+                if len(selected_files) == 0:
+                    st.warning("No files selected.")
+                else:
+                    delete_selected_files(selected_files)
+
+if not logged_in:
     st.header("You are not admin :angry:.")
