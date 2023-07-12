@@ -80,6 +80,5 @@ if logged_in:
                     st.warning("No files selected.")
                 else:
                     delete_selected_files(selected_files)
-
-if not logged_in:
+else:
     st.header("You are not admin :angry:.")
