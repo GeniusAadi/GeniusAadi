@@ -12,45 +12,50 @@ hide_st_style = '''
     </style>
     '''
 st.markdown(hide_st_style, unsafe_allow_html=True)
-#function for downloading both videos and photos
-def download_image(url):
-    with open(url, "r+", encoding="latin1") as f:
-        url_bytes=f.read()
-        f.write(url_bytes)
 
-# get the website root directory
+# Function for downloading images
+def download_image(file_path):
+    with open(file_path, "rb") as f:
+        image_bytes = f.read()
+    return image_bytes
+
+# Get the website root directory
 root_dir = Path("my_directory")
 
-# check if the root directory exists
+# Check if the root directory exists
 if not root_dir.exists():
     st.error("Website root directory not found.")
-if root_dir is not None:
-    # get the list of subdirectories within the root directory
+else:
+    # Get the list of subdirectories within the root directory
     subdirs = [x for x in root_dir.iterdir() if x.is_dir()]
 
-    # create a selectbox for the subdirectories
+    # Create a selectbox for the subdirectories
     selected_dir = st.selectbox("Select a folder:", subdirs)
 
-    # get the list of files within the selected subdirectory
-    files = [x for x in selected_dir.iterdir() if x.is_file()]
+    if selected_dir:
+        # Get the list of files within the selected subdirectory
+        files = [x for x in selected_dir.iterdir() if x.is_file()]
 
-# display the list of files
-st.write("Files in selected folder:")
-for file in files:
-    st.write("- " + file.name)
-    if selected_dir == subdirs[1]:
-        image_paths= Image.open(file)
-        with BytesIO() as output:
-            image_paths.save(output, format='PNG')
-            image_bytes = output.getvalue()
-        if st.download_button("Download Image",image_bytes,file_name=file.name,mime="png/jpg/pdf/gif/tiff/psd/eps/ai/indd/raw"):
-            download_image(file)
-            st.success("Image downloaded successfully")
-        st.image(image_paths, width=250, caption=image_paths)
-    elif selected_dir == subdirs[0]:
-        video_file = open(file, 'rb')
-        video_bytes = video_file.read()
-        if st.download_button("Download Video",video_bytes,file_name=file.name,mime="video/webm/mpg/mp2/mpeg/mpe/mpv/ogg/mp4/m4p/m4v/avi/wmv/mov/qt/flv/swf/avchd"):
-            download_image(file)
-            st.success("Video downloaded successfully")
-        st.video(video_bytes)
+        # Display the list of files
+        st.write("Files in selected folder:")
+        for file in files:
+            st.write("- " + file.name)
+
+            if selected_dir == subdirs[1]:
+                # Display and download images
+                image = Image.open(file)
+                st.image(image, width=250, caption=file.name)
+
+                if st.download_button("Download Image", file.name, file.name, "image/png"):
+                    image_bytes = download_image(file)
+                    st.success("Image downloaded successfully")
+
+            elif selected_dir == subdirs[0]:
+                # Display and download videos
+                video_file = open(file, 'rb')
+                video_bytes = video_file.read()
+                st.video(video_bytes)
+
+                if st.download_button("Download Video", file.name, file.name, "video/mp4"):
+                    video_bytes = download_image(file)
+                    st.success("Video downloaded successfully")
