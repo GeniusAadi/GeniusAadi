@@ -41,19 +41,19 @@ else:
         for file in files:
             st.write("- " + file.name)
 
-            if selected_dir == subdirs[1]:
+            if selected_dir == subdirs[0]:
                 try:
                     # Display and download images
                     image = Image.open(file)
                     st.image(image, width=250, caption=file.name)
 
-                    if st.download_button("Download Image", file.name, file.name, "image/png"):
+                    if st.download_button("Download Image", file.name, file.name, "image/png/jpg"):
                         image_bytes = download_image(file)
                         st.success("Image downloaded successfully")
                 except Image.UnidentifiedImageError:
                     st.error("Failed to open image: Invalid or unsupported image format.")
 
-            elif selected_dir == subdirs[0]:
+            elif selected_dir == subdirs[1]:
                 # Display and download videos
                 video_file = open(file, 'rb')
                 video_bytes = video_file.read()
