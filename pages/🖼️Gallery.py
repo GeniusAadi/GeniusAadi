@@ -42,13 +42,16 @@ else:
             st.write("- " + file.name)
 
             if selected_dir == subdirs[1]:
-                # Display and download images
-                image = Image.open(file)
-                st.image(image, width=250, caption=file.name)
+                try:
+                    # Display and download images
+                    image = Image.open(file)
+                    st.image(image, width=250, caption=file.name)
 
-                if st.download_button("Download Image", file.name, file.name, "image/png"):
-                    image_bytes = download_image(file)
-                    st.success("Image downloaded successfully")
+                    if st.download_button("Download Image", file.name, file.name, "image/png"):
+                        image_bytes = download_image(file)
+                        st.success("Image downloaded successfully")
+                except Image.UnidentifiedImageError:
+                    st.error("Failed to open image: Invalid or unsupported image format.")
 
             elif selected_dir == subdirs[0]:
                 # Display and download videos
