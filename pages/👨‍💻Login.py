@@ -88,7 +88,8 @@ class GalleryApp:
                 st.warning("No files selected.")
             else:
                 for file in selected_files:
-                    file_path = f"my_directory/{'photos' if file in files[:len(files)//2] else 'videos'}/{file}"
+                    file_dir = "photos" if file in files[:len(files)//2] else "videos"
+                    file_path = f"my_directory/{file_dir}/{file}"
                     commit_message = "Delete file"
 
                     url = f"https://api.github.com/repos/{self.owner}/{self.repo}/contents/{file_path}"
