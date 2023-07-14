@@ -13,14 +13,18 @@ class GalleryApp:
         self.local_repo_path = "path/to/local/repo"  # Replace with the local path of your repository
 
     def login(self):
+        # Check if already logged in
+        if "logged_in" in st.session_state and st.session_state.logged_in:
+            self.show_gallery()
+            return
+
         # Login form
         st.title("Login as Admin")
-        name = st.text_input("Admin name")
-        password = st.text_input("Password", type='password')
+        name = st.text_input("Admin name", key="admin_name")
+        password = st.text_input("Password", type='password', key="admin_password")
         if (name == "Rakes Rao") and (password == "R@kE$#M@th$&Mu$ic"):
-            login_button = st.button("Login", key="login_button")
-            if login_button:
-                self.show_gallery()
+            st.session_state.logged_in = True
+            self.show_gallery()
         else:
             st.header("You are not admin :angry:.")
 
