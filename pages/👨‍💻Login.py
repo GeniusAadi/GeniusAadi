@@ -10,31 +10,32 @@ class GalleryApp:
         self.repo = repo
         self.branch = branch
         self.personal_access_token = personal_access_token
-        self.local_repo_path = "GeniusAadi/GeniusAadi"  # Replace with the local path of your repository
+        self.local_repo_path = "path/to/local/repo"  # Replace with the local path of your repository
 
     def login(self):
         # Login form
         st.title("Login as Admin")
-        name = st.text_input("Admin name", key="admin_name")
-        password = st.text_input("Password", type='password', key="admin_password")
-        login_button = st.button("Login", key="login_button")
-        if login_button and (name == "Rakes Rao") and (password == "R@kE$#M@th$&Mu$ic"):
-            self.show_gallery()
-        elif login_button:
-            st.error("Invalid credentials.")
-            
+        name = st.text_input("Admin name")
+        password = st.text_input("Password", type='password')
+        if (name == "Rakes Rao") and (password == "R@kE$#M@th$&Mu$ic"):
+            login_button = st.button("Login", key="login_button")
+            if login_button:
+                self.show_gallery()
+        else:
+            st.header("You are not admin :angry:.")
+
     def show_gallery(self):
         st.title("Welcome to Gallery.")
         st.header("WELCOME Rao Sir.")
-        if st.button("Gallery"):
+        gal = st.button("Gallery")
+        if gal:
             self.display_files()
             self.upload_files()
             self.delete_files()
 
-
     def display_files(self):
-        pho = st.checkbox("Photos", key="photos_checkbox")
-        vdo = st.checkbox("Videos", key="videos_checkbox")
+        pho = st.checkbox("Photos")
+        vdo = st.checkbox("Videos")
         if pho:
             photos_files = os.listdir("my_directory/photos")
             st.write("Photos:")
@@ -47,10 +48,10 @@ class GalleryApp:
                 st.write("- " + file)
 
     def upload_files(self):
-        pho = st.checkbox("Photos", key="upload_photos_checkbox")
-        vdo = st.checkbox("Videos", key="upload_videos_checkbox")
+        pho = st.checkbox("Photos")
+        vdo = st.checkbox("Videos")
         if pho or vdo:
-            upload = st.file_uploader("Upload Files", type=["png", "jpg", "pdf", "gif", "tiff", "psd", "eps", "ai", "indd", "raw", "webm", "mpg", "mp2", "mpeg", "mpe", "mpv", "ogg", "mp4", "m4p", "m4v", "avi", "wmv", "mov", "qt", "flv", "swf", "avchd"], key="file_uploader")
+            upload = st.file_uploader("Upload Files", type=["png", "jpg", "pdf", "gif", "tiff", "psd", "eps", "ai", "indd", "raw", "webm", "mpg", "mp2", "mpeg", "mpe", "mpv", "ogg", "mp4", "m4p", "m4v", "avi", "wmv", "mov", "qt", "flv", "swf", "avchd"])
             if upload is not None:
                 file_content = upload.getvalue()
                 file_content_base64 = base64.b64encode(file_content).decode("utf-8")
@@ -76,8 +77,8 @@ class GalleryApp:
                     st.error(f"Response: {response.text}")
 
     def delete_files(self):
-        pho = st.checkbox("Photos", key="delete_photos_checkbox")
-        vdo = st.checkbox("Videos", key="delete_videos_checkbox")
+        pho = st.checkbox("Photos")
+        vdo = st.checkbox("Videos")
         if pho or vdo:
             files = []
             if pho:
@@ -85,9 +86,8 @@ class GalleryApp:
             if vdo:
                 files.extend(os.listdir("my_directory/videos"))
     
-            selected_files = st.multiselect("Select files to delete:", options=files, key="delete_files_multiselect")
-            delete_button = st.button("Delete Selected Files", key="delete_files_button")
-            if delete_button:
+            selected_files = st.multiselect("Select files to delete:", options=files)
+            if st.button("Delete Selected Files"):
                 if len(selected_files) == 0:
                     st.warning("No files selected.")
                 else:
