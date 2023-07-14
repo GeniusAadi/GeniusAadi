@@ -144,7 +144,6 @@ if __name__ == "__main__":
     branch = "main"
     personal_access_token = "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"
 
-    caching.clear_cache()
     session_state = SessionState(logged_in=False)
     app = GalleryApp(owner, repo, branch, personal_access_token)
     app.login()
