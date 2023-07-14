@@ -19,6 +19,8 @@ class GalleryApp:
         password = st.text_input("Password", type='password')
         if (name == "Rakes Rao") and (password == "R@kE$#M@th$&Mu$ic"):
             self.show_gallery()
+        else:
+            st.header("You are not admin :angry:.")
 
     def show_gallery(self):
         st.title("Welcome to Gallery.")
