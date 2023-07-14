@@ -26,11 +26,11 @@ class GalleryApp:
     def show_gallery(self):
         st.title("Welcome to Gallery.")
         st.header("WELCOME Rao Sir.")
-        gallery_button = st.sidebar.button("Gallery", key="gallery_button")
-        if gallery_button:
+        if st.button("Gallery"):
             self.display_files()
             self.upload_files()
             self.delete_files()
+
 
     def display_files(self):
         pho = st.checkbox("Photos", key="photos_checkbox")
