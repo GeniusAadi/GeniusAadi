@@ -27,6 +27,7 @@ class GalleryApp:
     def show_gallery(self):
         st.title("Welcome to Gallery.")
         st.header("WELCOME Rao Sir.")
+        gallery_placeholder = st.empty()
         gal = st.button("Gallery")
         if gal:
             self.display_files()
