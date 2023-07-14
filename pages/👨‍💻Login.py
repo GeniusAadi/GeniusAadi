@@ -147,4 +147,4 @@ if __name__ == "__main__":
     session_state = SessionState(logged_in=False)
     app = GalleryApp(owner, repo, branch, personal_access_token)
     app.login()
-    app.show_gallery(session_state)
+    app.show_gallery()
