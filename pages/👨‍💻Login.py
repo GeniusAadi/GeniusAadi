@@ -4,6 +4,10 @@ import requests
 import os
 from git import Repo
 
+class SessionState:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
 class GalleryApp:
     def __init__(self, owner, repo, branch, personal_access_token):
         self.owner = owner
@@ -35,8 +39,8 @@ class GalleryApp:
         gal = gallery_placeholder.button("Gallery")
         if gal:
             self.display_files()
-            self.upload_files()
-            self.delete_files()
+            self.upload_files(session_state)
+            self.delete_files(session_state)
 
     def display_files(self):
         pho = st.checkbox("Photos")
@@ -52,9 +56,9 @@ class GalleryApp:
             for file in videos_files:
                 st.write("- " + file)
 
-    def upload_files(self):
-        pho = st.checkbox("Photos")
-        vdo = st.checkbox("Videos")
+    def upload_files(self,session_state):
+        pho = st.checkbox("Photos", key="upload_photos_checkbox")
+        vdo = st.checkbox("Videos", key="upload_videos_checkbox")
         if pho or vdo:
             upload = st.file_uploader("Upload Files", type=["png", "jpg", "pdf", "gif", "tiff", "psd", "eps", "ai", "indd", "raw", "webm", "mpg", "mp2", "mpeg", "mpe", "mpv", "ogg", "mp4", "m4p", "m4v", "avi", "wmv", "mov", "qt", "flv", "swf", "avchd"])
             if upload is not None:
@@ -81,9 +85,9 @@ class GalleryApp:
                     st.error("Failed to upload file.")
                     st.error(f"Response: {response.text}")
 
-    def delete_files(self):
-        pho = st.checkbox("Photos")
-        vdo = st.checkbox("Videos")
+    def delete_files(self,session_state):
+        pho = st.checkbox("Photos", key="delete_photos_checkbox")
+        vdo = st.checkbox("Videos", key="delete_videos_checkbox")
         if pho or vdo:
             files = []
             if pho:
@@ -140,5 +144,8 @@ if __name__ == "__main__":
     branch = "main"
     personal_access_token = "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"
 
+    caching.clear_cache()
+    session_state = SessionState(logged_in=False)
     app = GalleryApp(owner, repo, branch, personal_access_token)
     app.login()
+    app.show_gallery(session_state)
