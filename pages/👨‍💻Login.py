@@ -2,6 +2,7 @@ import streamlit as st
 import base64
 import requests
 import os
+from git import Repo
 
 class GalleryApp:
     def __init__(self, owner, repo, branch, personal_access_token):
@@ -9,6 +10,7 @@ class GalleryApp:
         self.repo = repo
         self.branch = branch
         self.personal_access_token = personal_access_token
+        self.local_repo_path = "GeniusAadi/GeniusAadi"  # Replace with the local path of your repository
 
     def login(self):
         # Login form
@@ -65,6 +67,7 @@ class GalleryApp:
                 if response.status_code == 201:
                     st.success("File uploaded successfully.")
                     st.image(upload) if pho else st.video(upload)
+                    self.commit_and_push_changes(commit_message)
                 else:
                     st.error("Failed to upload file.")
                     st.error(f"Response: {response.text}")
@@ -107,12 +110,20 @@ class GalleryApp:
 
                             if delete_response.status_code == 200:
                                 st.success(f"File '{file}' deleted successfully.")
+                                self.commit_and_push_changes(commit_message)
                             else:
                                 st.error(f"Failed to delete file '{file}'.")
                                 st.error(f"Response: {delete_response.text}")
                         else:
                             st.error(f"Failed to retrieve file data for '{file}'.")
                             st.error(f"Response: {response.text}")
+
+    def commit_and_push_changes(self, commit_message):
+        repo = Repo(self.local_repo_path)
+        repo.git.add(".")
+        repo.index.commit(commit_message)
+        origin = repo.remote("origin")
+        origin.push()
 
 if __name__ == "__main__":
     owner = "GeniusAadi"
