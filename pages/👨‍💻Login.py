@@ -28,7 +28,8 @@ class GalleryApp:
                  st.session_state.lg_state = False
              if lg or st.session_state.lg_state:
                  st.session_state.lg_state = True
-                 self.show_gallery()
+                 if lg:
+                     self.show_gallery()
         else:
             st.header("You are not admin :angry:.")
 
