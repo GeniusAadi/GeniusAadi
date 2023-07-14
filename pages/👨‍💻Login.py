@@ -17,30 +17,32 @@ class GalleryApp:
         self.local_repo_path = "path/to/local/repo"  # Replace with the local path of your repository
 
     def login(self):
-        # Check if already logged in
-        if "logged_in" in st.session_state and st.session_state.logged_in:
-            self.show_gallery()
-            return
-
         # Login form
         st.title("Login as Admin")
         name = st.text_input("Admin name", key="admin_name")
         password = st.text_input("Password", type='password', key="admin_password")
         if (name == "Rakes Rao") and (password == "R@kE$#M@th$&Mu$ic"):
-            st.session_state.logged_in = False
-            self.show_gallery()
+             lg=st.button("Login")
+             #initialize session state
+             if "lg_state" not in st.session_state:
+                 st.session_state.lg_state = False
+             if lg or st.session_state.lg_state:
+                 st.session_state.lg_state = True
+                 self.show_gallery()
         else:
             st.header("You are not admin :angry:.")
 
     def show_gallery(self):
         st.title("Welcome to Gallery.")
         st.header("WELCOME Rao Sir.")
-        gallery_placeholder = st.empty()
-        gal = gallery_placeholder.button("Gallery")
-        if gal:
-            #self.display_files()
+        gal = st.button("Gallery")
+        #initialize session state
+        if "gal_state" not in st.session_state:
+            st.session_state.gal_state = False
+        if gal or st.session_state.gal_state:
+            st.session_state.gal_state = True
             self.upload_files(session_state)
-            self.delete_files(session_state)
+            self.delete_files()
 
     # Function to delete selected files
     def delete_selected_files(selected_files):
@@ -77,9 +79,6 @@ class GalleryApp:
             else:
                 st.error(f"Failed to retrieve file data for '{file}'.")
                 st.error(f"Response: {response.text}")
-    
-        st.success("Selected files have been deleted.")
-
 
     def upload_files(self,session_state):
         pho = st.checkbox("Photos", key="upload_photos_checkbox")
