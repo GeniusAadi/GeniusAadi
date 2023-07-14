@@ -27,7 +27,7 @@ class GalleryApp:
         name = st.text_input("Admin name", key="admin_name")
         password = st.text_input("Password", type='password', key="admin_password")
         if (name == "Rakes Rao") and (password == "R@kE$#M@th$&Mu$ic"):
-            st.session_state.logged_in = True
+            st.session_state.logged_in = False
             self.show_gallery()
         else:
             st.header("You are not admin :angry:.")
