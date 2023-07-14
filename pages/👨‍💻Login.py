@@ -17,11 +17,12 @@ class GalleryApp:
         st.title("Login as Admin")
         name = st.text_input("Admin name", key="admin_name")
         password = st.text_input("Password", type='password', key="admin_password")
-        if (name == "Rakes Rao") and (password == "R@kE$#M@th$&Mu$ic"):
+        login_button = st.button("Login", key="login_button")
+        if login_button and (name == "Rakes Rao") and (password == "R@kE$#M@th$&Mu$ic"):
             self.show_gallery()
-        else:
-            st.header("You are not admin :angry:.")
-
+        elif login_button:
+            st.error("Invalid credentials.")
+            
     def show_gallery(self):
         st.title("Welcome to Gallery.")
         st.header("WELCOME Rao Sir.")
@@ -83,9 +84,10 @@ class GalleryApp:
                 files.extend(os.listdir("my_directory/photos"))
             if vdo:
                 files.extend(os.listdir("my_directory/videos"))
-    
+
             selected_files = st.multiselect("Select files to delete:", options=files, key="delete_files_multiselect")
-            if st.button("Delete Selected Files", key="delete_files_button"):
+            delete_button = st.button("Delete Selected Files", key="delete_files_button")
+            if delete_button:
                 if len(selected_files) == 0:
                     st.warning("No files selected.")
                 else:
@@ -93,24 +95,24 @@ class GalleryApp:
                         file_dir = "photos" if file in files[:len(files)//2] else "videos"
                         file_path = f"my_directory/{file_dir}/{file}"
                         commit_message = "Delete file"
-    
+
                         url = f"https://api.github.com/repos/{self.owner}/{self.repo}/contents/{file_path}"
                         headers = {"Authorization": f"token {self.personal_access_token}"}
                         response = requests.get(url, headers=headers)
-    
+
                         if response.status_code == 200:
                             file_data = response.json()
                             file_sha = file_data["sha"]
-    
+
                             payload = {
                                 "message": commit_message,
                                 "sha": file_sha,
                                 "branch": self.branch
                             }
-    
+
                             delete_url = f"https://api.github.com/repos/{self.owner}/{self.repo}/contents/{file_path}"
                             delete_response = requests.delete(delete_url, json=payload, headers=headers)
-    
+
                             if delete_response.status_code == 200:
                                 st.success(f"File '{file}' deleted successfully.")
                             else:
