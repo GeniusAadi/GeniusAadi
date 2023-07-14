@@ -28,7 +28,7 @@ class GalleryApp:
         st.title("Welcome to Gallery.")
         st.header("WELCOME Rao Sir.")
         gallery_placeholder = st.empty()
-        gal = st.button("Gallery")
+        gal = gallery_placeholder.button("Gallery")
         if gal:
             self.display_files()
             self.upload_files()
