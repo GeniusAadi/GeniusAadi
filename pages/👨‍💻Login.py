@@ -28,9 +28,9 @@ class GalleryApp:
             st.session_state.logged_in = False
         
         # Check if already logged in
-        if st.session_state.logged_in:
+        '''if st.session_state.logged_in:
             self.show_gallery()
-            return
+            return'''
         
         if lg:
             if (name == "Rakes Rao") and (password == "R@kE$#M@th$&Mu$ic"):
