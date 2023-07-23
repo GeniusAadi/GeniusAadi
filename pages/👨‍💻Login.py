@@ -59,24 +59,26 @@ class GalleryApp:
     def upload_files(self):
         pho = st.checkbox("Photos", key="upload_photos_checkbox")
         vdo = st.checkbox("Videos", key="upload_videos_checkbox")
+    
         if pho or vdo:
             upload = st.file_uploader("Upload Files", type=["png", "jpg", "pdf", "gif", "tiff", "psd", "eps", "ai", "indd", "raw", "webm", "mpg", "mp2", "mpeg", "mpe", "mpv", "ogg", "mp4", "m4p", "m4v", "avi", "wmv", "mov", "qt", "flv", "swf", "avchd"])
+    
             if upload is not None:
                 file_content = upload.getvalue()
                 file_content_base64 = base64.b64encode(file_content).decode("utf-8")
                 file_path = f"my_directory/{'photos' if pho else 'videos'}/{upload.name}"
                 commit_message = "Upload file"
-
+    
                 payload = {
                     "message": commit_message,
                     "content": file_content_base64,
                     "branch": self.branch
                 }
-
+    
                 url = f"https://api.github.com/repos/{self.owner}/{self.repo}/contents/{file_path}"
                 headers = {"Authorization": f"token {self.personal_access_token}"}
                 response = requests.put(url, json=payload, headers=headers)
-
+    
                 if response.status_code == 201:
                     st.success("File uploaded successfully.")
                     st.image(upload) if pho else st.video(upload)
@@ -84,6 +86,9 @@ class GalleryApp:
                 else:
                     st.error("Failed to upload file.")
                     st.error(f"Response: {response.text}")
+                    # Print the full response for debugging purposes
+                    # st.write(response.json())
+
 
     def delete_files(self):
         rm = st.button("Delete")
