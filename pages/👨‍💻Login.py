@@ -23,11 +23,16 @@ class GalleryApp:
         password = st.text_input("Password", type='password', key="admin_password")
         lg = st.button("Login")
         
-        # Initialize session state
+        # Initialize session state for login
         if "logged_in" not in st.session_state:
             st.session_state.logged_in = False
-            
-        if lg or st.session_state.logged_in:
+        
+        # Check if already logged in
+        if st.session_state.logged_in:
+            self.show_gallery()
+            return
+        
+        if lg:
             if (name == "Rakes Rao") and (password == "R@kE$#M@th$&Mu$ic"):
                 st.session_state.logged_in = True
                 self.show_gallery()
@@ -35,15 +40,18 @@ class GalleryApp:
                 st.header("You are not admin :angry:.")
 
     def show_gallery(self):
-        st.title("Welcome to Gallery.")
-        st.header("WELCOME Rao Sir.")
-        gal = st.button("Gallery")
+        # Display "Welcome to Gallery" only if logged in
+        if st.session_state.logged_in:
+            st.title("Welcome to Gallery.")
+            st.header("WELCOME Rao Sir.")
         
-        # Initialize session state
+        gallery_placeholder = st.empty()
+        
+        # Initialize session state for gallery button
         if "gallery_shown" not in st.session_state:
             st.session_state.gallery_shown = False
-            
-        if gal or st.session_state.gallery_shown:
+        
+        if st.session_state.logged_in and (st.session_state.gallery_shown or gallery_placeholder.button("Gallery")):
             st.session_state.gallery_shown = True
             self.upload_files()
             self.delete_files()
