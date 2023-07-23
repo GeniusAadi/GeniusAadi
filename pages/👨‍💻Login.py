@@ -21,67 +21,34 @@ class GalleryApp:
         st.title("Login as Admin")
         name = st.text_input("Admin name", key="admin_name")
         password = st.text_input("Password", type='password', key="admin_password")
-        if (name == "Rakes Rao") and (password == "R@kE$#M@th$&Mu$ic"):
-             lg=st.button("Login")
-             #initialize session state
-             if "lg_state" not in st.session_state:
-                 st.session_state.lg_state = False
-             if lg or st.session_state.lg_state:
-                 st.session_state.lg_state = True
-                 if lg:
-                     self.show_gallery()
-        else:
-            st.header("You are not admin :angry:.")
+        lg = st.button("Login")
+        
+        # Initialize session state
+        if "logged_in" not in st.session_state:
+            st.session_state.logged_in = False
+            
+        if lg or st.session_state.logged_in:
+            if (name == "Rakes Rao") and (password == "R@kE$#M@th$&Mu$ic"):
+                st.session_state.logged_in = True
+                self.show_gallery()
+            else:
+                st.header("You are not admin :angry:.")
 
     def show_gallery(self):
         st.title("Welcome to Gallery.")
         st.header("WELCOME Rao Sir.")
         gal = st.button("Gallery")
-        #initialize session state
-        if "gal_state" not in st.session_state:
-            st.session_state.gal_state = False
-        if gal or st.session_state.gal_state:
-            st.session_state.gal_state = True
-            self.upload_files(session_state)
+        
+        # Initialize session state
+        if "gallery_shown" not in st.session_state:
+            st.session_state.gallery_shown = False
+            
+        if gal or st.session_state.gallery_shown:
+            st.session_state.gallery_shown = True
+            self.upload_files()
             self.delete_files()
 
-    # Function to delete selected files
-    def delete_selected_files(selected_files):
-        # Delete selected files from GitHub
-        for file in selected_files:
-            file_path = f"my_directory/photos/{file}" if os.listdir("my_directory/photos") else f"my_directory/videos/{file}"
-            commit_message = "Delete file"
-    
-            # Get the file's current SHA
-            url = f"https://api.github.com/repos/{owner}/{repo}/contents/{file_path}"
-            headers = {"Authorization": f"token {personal_access_token}"}
-            response = requests.get(url, headers=headers)
-            if response.status_code == 200:
-                file_data = response.json()
-                file_sha = file_data["sha"]
-    
-                # Create the deletion payload
-                payload = {
-                    "message": commit_message,
-                    "content": file_content_base64,
-                    "branch": self.branch
-                }
-    
-                # Delete the file on GitHub
-                delete_url = f"https://api.github.com/repos/{self.owner}/{self.repo}/contents/{file_path}"
-                headers = {"Authorization": f"token {self.personal_access_token}"}
-                delete_response = requests.delete(delete_url, json=payload, headers=headers)
-    
-                if delete_response.status_code == 200:
-                    st.success(f"File '{file}' deleted successfully.")
-                else:
-                    st.error(f"Failed to delete file '{file}'.")
-                    st.error(f"Response: {delete_response.text}")
-            else:
-                st.error(f"Failed to retrieve file data for '{file}'.")
-                st.error(f"Response: {response.text}")
-
-    def upload_files(self,session_state):
+    def upload_files(self):
         pho = st.checkbox("Photos", key="upload_photos_checkbox")
         vdo = st.checkbox("Videos", key="upload_videos_checkbox")
         if pho or vdo:
@@ -110,13 +77,15 @@ class GalleryApp:
                     st.error("Failed to upload file.")
                     st.error(f"Response: {response.text}")
 
-    def delete_files():
-        rm=st.button("Delete")
-        #initialize session state
-        if "rm_state" not in st.session_state:
-            st.session_state.rm_state = False
-        if rm or st.session_state.lg_state:
-            st.session_state.rm_state = True
+    def delete_files(self):
+        rm = st.button("Delete")
+        
+        # Initialize session state
+        if "delete_shown" not in st.session_state:
+            st.session_state.delete_shown = False
+        
+        if rm or st.session_state.delete_shown:
+            st.session_state.delete_shown = True
             # Display checkboxes for all files in the "photos" directory
             photos_files = os.listdir("my_directory/photos")
             photos_files_selected = st.multiselect("Select photos to delete:", options=photos_files)
@@ -131,7 +100,42 @@ class GalleryApp:
                     st.warning("No files selected.")
                 else:
                     selected_files = photos_files_selected + videos_files_selected
-                    delete_selected_files(selected_files)
+                    self.delete_selected_files(selected_files)
+
+    def delete_selected_files(self, selected_files):
+        # Delete selected files from GitHub
+        for file in selected_files:
+            file_path = f"my_directory/photos/{file}" if os.listdir("my_directory/photos") else f"my_directory/videos/{file}"
+            commit_message = "Delete file"
+    
+            # Get the file's current SHA
+            url = f"https://api.github.com/repos/{self.owner}/{self.repo}/contents/{file_path}"
+            headers = {"Authorization": f"token {self.personal_access_token}"}
+            response = requests.get(url, headers=headers)
+            if response.status_code == 200:
+                file_data = response.json()
+                file_sha = file_data["sha"]
+    
+                # Create the deletion payload
+                payload = {
+                    "message": commit_message,
+                    "sha": file_sha,
+                    "branch": self.branch
+                }
+    
+                # Delete the file on GitHub
+                delete_url = f"https://api.github.com/repos/{self.owner}/{self.repo}/contents/{file_path}"
+                headers = {"Authorization": f"token {self.personal_access_token}"}
+                delete_response = requests.delete(delete_url, json=payload, headers=headers)
+    
+                if delete_response.status_code == 200:
+                    st.success(f"File '{file}' deleted successfully.")
+                else:
+                    st.error(f"Failed to delete file '{file}'.")
+                    st.error(f"Response: {delete_response.text}")
+            else:
+                st.error(f"Failed to retrieve file data for '{file}'.")
+                st.error(f"Response: {response.text}")
 
     def commit_and_push_changes(self, commit_message):
         repo = Repo(self.local_repo_path)
