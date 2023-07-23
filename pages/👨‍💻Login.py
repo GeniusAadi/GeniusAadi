@@ -75,7 +75,7 @@ class GalleryApp:
                     "branch": self.branch
                 }
     
-                url = f"https://api.github.com/repos/{self.owner}/{self.repo}/contents/{file_path}"
+                url = f"https://api.github.com/repos/{self.owner}/{self.repo}/{file_path}"
                 headers = {"Authorization": f"token {self.personal_access_token}"}
                 response = requests.put(url, json=payload, headers=headers)
     
